@@ -12,7 +12,7 @@ const App = () => {
   const handleUpload = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const file = event.target.files[0];
+    const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
     const formData = new FormData();
@@ -67,7 +67,7 @@ const App = () => {
       <input type="file" onChange={handleUpload} />
       {message && <p>{message}</p>}
 
-      <div className="flesx ">
+      <div className="">
         <h1>Yüklenmiş Dosyalar</h1>
         {loading && <p>Yükleniyor...</p>}
         {error && <p>{error}</p>}
