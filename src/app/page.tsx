@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -28,18 +29,17 @@ const App = () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error("API error:", errorText);
-        alert("Yükleme başarısız!"); // Kendi hata mesajınızı gösterin
+        alert("Yükleme başarısız!");
         return;
       }
 
       // Yanıtı JSON olarak işleme
       const result = await response.json();
-      console.log(result); // Başarılı işlem sonrası yanıt
+      setMessage(result.message);
     } catch (error) {
       console.error("Yükleme hatası:", error);
       alert("Yükleme sırasında bir hata oluştu!");
     }
-    // setMessage(result.message);
   };
 
   useEffect(() => {
@@ -51,8 +51,10 @@ const App = () => {
         );
         setFiles(response.data.files);
         setLoading(false);
-      } catch (error) {
-        setError("Dosyalar alınırken hata oluştu");
+      } catch (error: unknown) {
+        if (error instanceof Error)
+          setError(`Dosyalar alınırken hata oluştu: ${error.message}`);
+        else setError("Dosyalar alınırken hata oluştu");
         setLoading(false);
       }
     };
@@ -68,14 +70,14 @@ const App = () => {
       {message && <p>{message}</p>}
 
       <div className="">
-        <h1>Yüklenmiş Dosyalar</h1>
-        {loading && <p>Yükleniyor...</p>}
+        <h1>Loaded images</h1>
+        {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
         {files.length > 0 ? (
           <ul>
             {files.map((fileUrl, index) => (
               <li key={index}>
-                <img src={fileUrl} alt={`file-${index}`} width={200} />
+                <Image src={fileUrl} alt={`file-${index}`} width={200} />
                 <br />
                 <a href={fileUrl} target="_blank" rel="noopener noreferrer">
                   Dosyayı Görüntüle
@@ -84,7 +86,7 @@ const App = () => {
             ))}
           </ul>
         ) : (
-          <p>Yüklenmiş dosya yok.</p>
+          <p>There is no image.</p>
         )}
       </div>
     </div>
