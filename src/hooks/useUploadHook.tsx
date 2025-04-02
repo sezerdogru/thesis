@@ -38,7 +38,7 @@ const useUploadHook = () => {
         setMessage("Success");
 
         window.location.reload();
-      } catch (error: any) {
+      } catch (error: unknown) {
         //setMessage(error);
         console.error("Uploading failed:", error); 
       }

@@ -28,11 +28,19 @@ export async function POST(req: NextRequest) {
 
     const url = await getSignedUrl(s3Client, command, { expiresIn: 300 });
     return NextResponse.json({ url }, { status: 200 });
-  } catch (error: any) {
-    console.error("Pre-signed URL hatası:", error.message || error);
-    return NextResponse.json(
-      { error: `URL alınamadı: ${error.message || error}` },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Pre-signed URL hatası:", error?.message);
+      return NextResponse.json(
+        { error: `URL alınamadı: ${error.message}` },
+        { status: 500 }
+      );
+    } else {
+      console.error("Pre-signed URL hatası:", error);
+      return NextResponse.json(
+        { error: `URL alınamadı: ${error}` },
+        { status: 500 }
+      );
+    }
   }
 }
