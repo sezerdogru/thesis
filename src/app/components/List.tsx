@@ -2,14 +2,15 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { ImageProp } from "../api/images/route";
 
 type Props = {
-  files: string[];
+  images: ImageProp[];
   loading: boolean;
   error: string | null;
 };
 
-const List = ({ files, loading, error }: Props) => {
+const List = ({ images, loading, error }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -19,11 +20,11 @@ const List = ({ files, loading, error }: Props) => {
   };
 
   const prevImage = () => {
-    setCurrentIndex((prev) => (prev === 0 ? files.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1 + files.length) % files.length);
+    setCurrentIndex((prev) => (prev + 1 + images.length) % images.length);
   };
 
   useEffect(() => {
@@ -41,12 +42,12 @@ const List = ({ files, loading, error }: Props) => {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
-      {files.length > 0 ? (
+      {images.length > 0 ? (
         <ul className="grid grid-cols-4 xl:grid-cols-6 md:grid-cols-6 gap-2">
-          {files.map((fileUrl: string, index: number) => (
-            <li key={fileUrl} className="mb-4">
+          {images.map((image: ImageProp, index: number) => (
+            <li key={image.key} className="mb-4">
               <Image
-                src={fileUrl}
+                src={image.url}
                 alt={`file-${index}`}
                 width={200}
                 height={150}
@@ -90,7 +91,7 @@ const List = ({ files, loading, error }: Props) => {
             </svg>
           </span>
           <img
-            src={files[currentIndex]}
+            src={images[currentIndex].url}
             alt=""
             className="max-w-[90%] max-h-[80vh] rounded-xl shadow-2xl animate-zoomIn"
           />

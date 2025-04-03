@@ -1,18 +1,17 @@
-import axios from "axios";
+import { ImageProp } from "@/app/api/images/route";
 import { useEffect, useState } from "react";
 
 const useFetchHook = () => {
-  const [files, setFiles] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageProp[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get(
-          `https://sezer-be.vercel.app/get-uploaded-images`
-        );
-        setFiles(response.data.files);
+        const response = await fetch(`/api/images`);
+        const data: { images: ImageProp[] } = await response.json();
+        setImages(data.images);
         setLoading(false);
       } catch (error: unknown) {
         if (error instanceof Error)
@@ -26,10 +25,10 @@ const useFetchHook = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Updated files after upload:", files);
-  }, [files]);
+    console.log("Updated files after upload:", images);
+  }, [images]);
 
-  return { files, error, loading };
+  return { images, error, loading };
 };
 
 export default useFetchHook;

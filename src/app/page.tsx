@@ -5,12 +5,12 @@ import Upload from "./components/Upload";
 import List from "./components/List";
 
 const App = () => {
-  const { files, loading, error } = useFetchHook();
+  const { images, loading, error } = useFetchHook();
 
   return (
     <div className="flex flex-col px-4 lg:px-40 py-8">
       <Upload />
-      <List files={files} error={error} loading={loading} />
+      <List images={images} error={error} loading={loading} />
     </div>
   );
 };
