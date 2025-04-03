@@ -90,7 +90,7 @@ const List = ({ images, loading, error }: Props) => {
               />
             </svg>
           </span>
-          <img
+          <Image
             src={images[currentIndex].url}
             alt=""
             className="max-w-[90%] max-h-[80vh] rounded-xl shadow-2xl animate-zoomIn"

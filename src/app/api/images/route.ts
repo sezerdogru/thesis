@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 
@@ -17,15 +16,7 @@ export type ImageProp = {
   url: string;
 };
 
-type ApiResponse = {
-  images: ImageProp[];
-  message?: string;
-};
-
-export async function GET(
-  req: NextApiRequest,
-  res: NextApiResponse<ApiResponse | { error: string }>
-) {
+export async function GET() {
   try {
     const command = new ListObjectsV2Command({
       Bucket: process.env.AWS_BUCKET_NAME, // Bucket adını buraya yaz
