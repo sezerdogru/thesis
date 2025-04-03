@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ImageProp } from "../api/images/route";
 
 type Props = {
@@ -19,13 +19,13 @@ const List = ({ images, loading, error }: Props) => {
     setIsOpen(true);
   };
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+  }, [images.length]);
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1 + images.length) % images.length);
-  };
+  }, [images.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -35,7 +35,7 @@ const List = ({ images, loading, error }: Props) => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [prevImage, nextImage]);
 
   return (
     <div className="">
@@ -90,9 +90,9 @@ const List = ({ images, loading, error }: Props) => {
               />
             </svg>
           </span>
-          <Image
+          <img
             src={images[currentIndex].url}
-            alt=""
+            alt="" 
             className="max-w-[90%] max-h-[80vh] rounded-xl shadow-2xl animate-zoomIn"
           />
 
